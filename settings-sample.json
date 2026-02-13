@@ -1,0 +1,33 @@
+{
+  "jira": {
+    "baseUrl": "https://jira.company.com",
+    "auth": "bearer",
+    "token": "MjcwNDcyNTY4MDA0Og3Gfua6aQ7IybFRPggw7"
+  },
+  "operation": {
+    "projectKey": "PRJ",
+    "sourceEpicKey": "PRJ-1",
+    "targetEpicKey": "PRJ-10",
+    "issueTypeName": "Task",
+    "summaryPrefix": "000.PROJECT_NAME.",
+    "description": "[000. PROJECT_NAME|https://wiki.company.com/x/1pvXWg]",
+    "remoteLink": {
+      "url": "https://wiki.company.com/x/1pvXWg",
+      "title": "000.PROJECT_NAME"
+    },
+    "reporter": {
+      "accountId": null,
+      "username": "manager@company.com"
+    },
+    "architect": {
+      "accountId": null,
+      "username": "architect@company.com"
+    },
+    "architectComponent": "Architect Tribe",
+    "linkToOriginal": {
+      "typeName": "Clones"
+    },
+    "dryRun": true,
+    "singleIssueKey": "PRJ-3"
+  }
+}
