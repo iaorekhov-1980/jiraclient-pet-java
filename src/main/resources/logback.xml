@@ -1,0 +1,18 @@
+<!DOCTYPE configuration>
+<configuration>
+    <!-- Выводим логи в консоль -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Формат: время [уровень] имя-логгера - сообщение%n -->
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Корневой уровень логирования -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Для нашего пакета установим DEBUG, чтобы видеть детали -->
+    <logger name="io.github.iaorekhov.jiraclient" level="DEBUG"/>
+</configuration>
