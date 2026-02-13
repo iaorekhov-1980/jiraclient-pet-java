@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.iaorekhov.jiraclient.config.Config;
 import io.github.iaorekhov.jiraclient.config.ConfigValidationException;
 import io.github.iaorekhov.jiraclient.config.ConfigValidator;
-import io.github.iaorekhov.jiraclient.dto.JiraIssue;
 import io.github.iaorekhov.jiraclient.dto.ReportEntry;
 import io.github.iaorekhov.jiraclient.service.JiraCloningService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -17,13 +18,15 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class App {
+    private static final Logger log = LoggerFactory.getLogger(App.class);
+
 
     public static void main(String[] args) {
         try {
             // 1. Парсинг пути к конфигурационному файлу
             String configPath = parseConfigPath(args);
-            System.out.println("Loading config from: " + configPath);
-            System.out.println("Working directory: " + Paths.get(".").toAbsolutePath().normalize());
+            log.debug("Loading config from: {} ", configPath);
+            log.debug("Working directory: {}", Paths.get(".").toAbsolutePath().normalize());
             
             // 2. Загрузка конфигурации
             Config config = loadConfig(configPath);
@@ -44,14 +47,13 @@ public class App {
             // 7. Сохранение отчета (временно здесь)
             saveReport(config, results);
             
-            System.out.println("Cloning completed successfully!");
+            log.info("Cloning completed successfully!");
             
         } catch (ConfigValidationException e) {
-            System.err.println(e.getMessage());
+            log.error(e.getMessage(), e);
             System.exit(2);
         } catch (Exception e) {
-            System.err.println("Unexpected error: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Unexpected error: {}", e.getMessage(), e);
             System.exit(1);
         }
     }
@@ -101,7 +103,7 @@ public class App {
     private static void validateConfig(Config config) {
         ConfigValidator validator = new ConfigValidator();
         validator.validateAndNormalize(config);
-        System.out.println("Config validation passed!");
+        log.info("Config validation passed!");
     }
     
     /**
@@ -120,7 +122,7 @@ public class App {
         // Проверка подключения
         try {
             jiraClient.getMyself();
-            System.out.println("JIRA connection successful");
+            log.info("JIRA connection successful");
         } catch (Exception e) {
             throw new RuntimeException("Failed to connect to JIRA: " + e.getMessage(), e);
         }
@@ -132,9 +134,9 @@ public class App {
      * Вывод статистики клонирования в консоль
      */
     private static void printStatistics(Map<String, Object> stats) {
-        System.out.println("\n=== Cloning Statistics ===");
-        stats.forEach((key, value) -> System.out.printf("%s: %s%n", key, value));
-        System.out.println("==========================\n");
+        log.info("=== Cloning Statistics ===");
+        stats.forEach((key, value) -> log.info("{}: {}", key, value));
+        log.info("==========================");
     }
     
     /**
@@ -160,10 +162,10 @@ public class App {
             ObjectMapper mapper = new ObjectMapper();
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(filename), report);
             
-            System.out.println("Report saved: " + filename);
+            log.info("Report saved: {}", filename);
             
         } catch (Exception e) {
-            System.err.println("Failed to save report: " + e.getMessage());
+            log.error("Failed to save report: {}", e.getMessage(), e);
         }
     }
 
